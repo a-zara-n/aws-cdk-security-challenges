@@ -44,7 +44,7 @@ const getListObjects = async (
       return content.Key?.split('/').length === 1 || (content.Key?.split('/').length === 2 && content.Key?.split('/')[1] !== '');
     })
     .map((content) => {
-      return content.Key;
+      return content.Key?.split('/')[1];
     });
 
   return {
