@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  installer:
+    build: .
+    image: installer
+    container_name: installer
+    volumes:
+      - ../cdk:/app/cdk
+      - ../frontend:/app/frontend
+      - ./init.sh:/app/init.sh
+  cdk:
+    build: .
+    image: cdk
+    container_name: cdk
+    working_dir: /app/cdk
+    volumes:
+      - ../cdk:/app/cdk
+      - ../frontend:/app/frontend
+      - ./aws:/root/.aws/:ro
+      - ./deploy.sh:/app/deploy.sh
+  react:
+    build: .
+    image: react-service
+    container_name: react-service
+    working_dir: /app/frontend
+    volumes:
+      - ../frontend:/app/frontend
+      - ./react-build.sh:/app/frontend/react-build.sh
+    command: sh -c "cd /app/frontend && PORT=3001 npm run start"
+    ports:
+      - '3001:3001'
+    stdin_open: true
